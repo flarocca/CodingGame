@@ -77,11 +77,9 @@ function Graph() {
     }
     
     this._isAdjacent = (node, neightbour) => {
-        var ret = this.links.filter((l) => {
-            return (l.n1 === node && l.n2 === neightbour) || (l.n1 === neightbour && l.n2 === node);
+        return this.links.filter((l) => {
+            return !l.isBlocked && (l.n1 === node && l.n2 === neightbour) || (l.n1 === neightbour && l.n2 === node);
         }).length > 0;
-        
-        return ret;
     }
 }
 
