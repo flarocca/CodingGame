@@ -12,29 +12,6 @@ export default function Graph() {
           this.links.push({n1, n2, isBlocked: false});
     }
     
-    this.markGateway = (node) => {
-        var i = this.nodes.findIndex((n) => {return n.name === node});
-        this.nodes[i].isGateway = true;
-    }
-    
-    this.getPathToNearestGateway = (agent) => {
-        var gateways = this.getGateways();
-        var paths = [];
-        for (var i = 0; i < gateways.length; i++)
-            paths.push(this.getShortestPath(agent, gateways[i].name));
-        
-        paths.sort((a, b) => {
-            if(a.length > b.length) return 1;
-            if(a.length < b.length) return -1;
-            return 0;
-        });
-        return paths[0];
-    }
-    
-    this.getGateways = () => {
-        return this.nodes.filter((n) => {return n.isGateway === true});
-    }
-    
     this.getShortestPath = (start, target) => {
         var parents = [];
         var queue = [];
@@ -62,11 +39,6 @@ export default function Graph() {
         return null;
     }
     
-    this.blockLink = (n1, n2) => {
-        var i = this.links.findIndex((l) => {return (l.n1 === n1 && l.n2 === n2) || (l.n1 === n2 && l.n2 === n1)});
-        this.links[i].isBlocked = true;
-    }
-    
     this._buildPath = (parents, targetNode) => {
         var result = [targetNode];
         while (parents[targetNode] !== null) {
@@ -78,7 +50,7 @@ export default function Graph() {
     
     this._isAdjacent = (node, neightbour) => {
         return this.links.filter((l) => {
-            return !l.isBlocked && (l.n1 === node && l.n2 === neightbour) || (l.n1 === neightbour && l.n2 === node);
+            return (l.n1 === node && l.n2 === neightbour) || (l.n1 === neightbour && l.n2 === node);
         }).length > 0;
     }
 }
